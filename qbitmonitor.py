@@ -780,7 +780,15 @@ async def trackers_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 
             for tracker in torrent.trackers:
                 try:
-                    domain = urllib.parse.urlparse(tracker['url']).netloc
+                    tracker_url = tracker['url']
+                    if '://' not in tracker_url:
+                        tracker_url = f"//{tracker_url}"
+
+                    # Extrae el 'netloc' (dominio:puerto)
+                    netloc = urllib.parse.urlparse(tracker_url).netloc
+                    # Se queda solo con la parte antes de los dos puntos para ignorar el puerto
+                    domain = netloc.split(':')[0]
+
                     if domain in PRIVATE_TRACKER_DOMAINS:
                         found_private_domains.add(domain)
                         statuses_by_domain[domain] = tracker['status']
