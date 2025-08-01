@@ -1,0 +1,2 @@
+# Qbitmonitor
+Qbittorrent control.
